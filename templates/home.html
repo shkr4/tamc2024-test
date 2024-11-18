@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Doto:wght@100..900&family=Jaldi:wght@700
+    &family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700
+    &family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900
+    &display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Student Detail</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/libphonenumber-js/1.11.14/libphonenumber-js.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://unpkg.com/validator@latest/validator.min.js"></script>
+    <style>
+        .jaldi-bold {
+            font-family: "Jaldi", sans-serif;
+            font-weight: 700;
+            font-style: normal;
+        }
+        .ubuntu-medium {
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 500;
+            font-style: normal;
+        }
+        .lato-bold {
+            font-family: "Lato", sans-serif;
+            font-weight: 700;
+            font-style: normal;
+        }
+
+
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            font-family: "Ubuntu", sans-serif;
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        /* Alternating row colors */
+        tr:nth-child(even) {
+            background-color: #F7F7F7;
+        }
+        tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+        .form-container {
+            width: 50%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body style="background-color: #e7e5e5;">
+
+    <div style="margin-top: 3%;" class="container">
+        <h2 style="text-align: center; font-family: 'Ubuntu', sans-serif;">THAKURGANJ ANNAUL MATHEMATICS CONTEST ‒ \(11111101000_2 \)</h2>
+        <p style="text-align: center;"><b>Organised by: <a href="https://rmctkg.wordpress.com/">Ramanujan Mathematics Club</a>, Thakurganj</b></p>
+        <hr class="my-4">
+    </div>
+
+
+    <div style="margin-left: 10%;" class="mt-5">
+        <h5 style="font-family: 'Jaldi', sans-serif;">छात्र का विवरण भरें</h5>
+        <h5 style="font-family: 'Jaldi', sans-serif;">Fill in the Student's Details</h5>
+    </div>
+
+    <div class="container mt-1">
+
+        <form id="myForm">
+            <table>
+                <tr>
+                    <td><label for="name">
+                        <p><b>नाम / Name: </b></p>
+                    </label></td>
+                    <td><input type="text" class="form-control" id="name" name="name" required><br>
+                        
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><label for="g_name">
+                        <p><b>अभिभावक का नाम / Guardian's Name:</b></p>
+                    </label></td>
+                    <td><input type="text" class="form-control" id="g_name" name="g_name" required><br>
+                        
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td><label for="grade">
+                        <p><b>कक्षा / Class:</b> </p>
+                    </label></td>
+                    <td><select name="grade" id="grade">
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                      </select><br>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="ph">
+                        <p><b>मोबाईल / Mobile:</b> </p>
+                    </label></td>
+                    <td><input type="number" class="form-control" name="ph" id="ph" required><br>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="ano">
+                        <p><b>आधार सं० / Aadhaar No.:</b> </p>
+                    </label></td>
+                    <td><input type="number" class="form-control" id="ano" name="ano" required><br>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="email">
+                        <p><b>ई-मेल / E-Mail:</b> </p>
+                    </label></td>
+                    <td>
+                        <input type="email" class="form-control" name="email" id="email" required><br>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="school">
+                        <p><b>विद्यालय / School:</b> </p>
+                    </label></td>
+                    <td><input type="text" class="form-control" name="school" id="school" required><br></td>
+                    <br>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="address">
+                        <p><b>पता / Address:</b> </p>
+                    </label></td>
+                    <td><textarea class="form-control" name="address" name="address" id="address" required></textarea></td>
+                    <br>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td><p><b>क्या आपने पिछले TAMC परीक्षाओ में भाग लिया है?</b></p>
+                    <p><b>Have you participated in previous TAMC exams?</b></p>
+                    </td>
+                    <td>
+                        <input type="radio" name="prevAtt" value="y">
+                        <label for="html"><p><b>हाँ / Yes</b></p></label><br>
+                        <input type="radio" name="prevAtt" value="n">
+                        <label for="html"><p><b>नहीं / No</b></p></label>
+                    </td>
+                </tr>
+            </table>
+            <br>
+            <div style="text-align: center;">
+                <button type="submit" class="btn btn-primary btn-lg btn-block mb-5">Submit</button>                
+            </div>
+        </form>
+    </div>
+
+    <div class="container mb-5">
+        <form id="appStatus">
+            <label><p style="font-family: 'Ubuntu', sans-serif;"><b>अपनी आवेदन की स्थिति जाने<br>Know Your Application Status</b></p></label><br>
+            
+            <input type="number" id="anoEnquiry" placeholder="आधार सं० दर्ज करें / Enter Aadhaar No.">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+
+
+<script>
+
+    async function getStatus(){
+        const aNoToBeEnquired = document.getElementById('anoEnquiry').value;
+        const getStatusResponse = await fetch('/get_status',{
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+            ano:aNoToBeEnquired
+            })
+        });
+
+        try {
+            if (getStatusResponse.ok){
+            const responseData = await getStatusResponse.json(); 
+            alert(`You are registered!
+            
+            Name: ${responseData.name}
+            Guardian's Name: ${responseData.g_name}
+            Phone: ${responseData.phone}
+            email: ${responseData.email}
+            Registered on: ${responseData.time}
+            `)
+            }
+            
+            else {
+                alert("No record found!")
+            }
+        } 
+        
+        catch (error) {
+            alert("An error occurred: " + error.message);
+        }
+        
+    }
+
+    async function validateAndPay() {
+
+        //Getting the form data.        
+
+        const phone = document.getElementById('ph').value;
+        const email = document.getElementById('email').value;
+        const ano = document.getElementById('ano').value;
+        const name = document.getElementById('name').value;
+        const g_name = document.getElementById('g_name').value;
+        const grade = document.getElementById('grade').value;
+        const school = document.getElementById('school').value;
+        const address = document.getElementById('address').value;
+
+        const radioButtons = document.getElementsByName('prevAtt');
+        let prevAttV;
+        for (const radioButton of radioButtons) {
+            if (radioButton.checked) {
+                prevAttV = radioButton.value;
+                break;
+            }
+        }
+
+        //Validating Mobile and E-mail from frontend
+
+        const phoneNumber = libphonenumber.parsePhoneNumber(phone, 'IN');
+
+        if (phoneNumber.isValid() && validator.isEmail(email)) {
+            console.log(validator.isEmail(email))
+            console.log(phoneNumber.isValid());
+        } else{
+            alert("Phone number or Email is invalid")
+            return -1
+        }
+
+        //Validating AAdhar from backend
+
+        const anoValid = await fetch('/validate_data',{
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+            ano:ano
+            })
+        });
+
+        if (anoValid.ok){
+            alert("Aadhar No. has been used.");
+            return -1;
+        }
+        
+        ////////Entering the payment setup/////////
+
+        // Create an order on the server
+        const order = await fetch('/create_order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            }).then(res => res.json());
+
+        const options = {
+                key: "{{ key_id }}",
+                amount: order.amount,
+                currency: order.currency,
+                name: "RMC",
+                description: "Payment for TAMC - 2024",
+                order_id: order.id,
+                
+                handler: async function (response) {
+                    // Send payment details for verification
+                            const verifyResponse = await fetch('/verify_payment', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                body: new URLSearchParams({
+                                    orderID: order.id,
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature
+                                })
+                            });
+
+                    if (verifyResponse.ok) { // Status code 200-299 indicates success
+                        const data = await verifyResponse.json();
+                        console.log("Payment verified successfully", data);
+                        const saveInDatabase = await fetch('/save_in_databse',{
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                body: new URLSearchParams({
+                                name: name,
+                                g_name: g_name,
+                                school: school,
+                                grade: grade,
+                                email: email,
+                                phone: phone,
+                                address: address,
+                                order_id: order.id,
+                                prevAtt: prevAttV,
+                                ano:ano
+                            })
+                        });
+
+                        if (saveInDatabase.ok){
+                            console.log("Everything is ok")
+                            alert("Hi! Your registration is succesful. Reload to register another application.")
+                        }
+                    } else {
+                        const errorData = await verifyResponse.json();
+                        console.error("Payment verification failed", errorData);
+                        // Handle failed verification (e.g., display error to user)
+                    }
+                    
+                },
+                method: {
+                    upi: true, // Enable UPI
+                    card: true, // Enable Cards
+                    wallet: true, // Enable Wallets
+                    netbanking: true // Enable Net Banking
+                },
+                prefill: { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+                    "name": name, //your customer's name
+                    "email": email,
+                    "contact": phone //Provide the customer's phone number for better conversion rates 
+                },
+                theme: {
+                    color: "#528FF0"
+                }
+            };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+        }
+</script>
+
+<script>
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default submission
+            console.log('Form submission is handled via JavaScript!');
+            // Custom logic goes here
+            validateAndPay();
+        });
+        document.getElementById('appStatus').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default submission
+            getStatus();
+            
+        });
+</script>
+
+</body>
+</html>
