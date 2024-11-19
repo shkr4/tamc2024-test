@@ -1,17 +1,26 @@
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql import func
+# from sqlalchemy.sql import func
+# from sqlalchemy_utils import TimeZone
 import razorpay
+from dotenv import load_dotenv
+import os
+from datetime import datetime
+import pytz
+
+load_dotenv()
 
 app = Flask(__name__)
 
+secret_key = os.environ.get('secret_key')
+db_uri = os.environ.get('db_uri')
 
-app.config['SECRET_KEY'] = 'mysecretkey'
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project2.db"
+app.config['SECRET_KEY'] = secret_key
+app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
 
 db = SQLAlchemy(app)
 
-# db.init_app(app)
+IST = pytz.timezone('Asia/Kolkata')
 
 
 class User(db.Model):
@@ -29,15 +38,17 @@ class User(db.Model):
     prevAtt = db.Column(db.String)
     paymentStatus = db.Column(db.String)
     ano = db.Column(db.String)
-    created_at = db.Column(db.DateTime, default=func.now())
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(IST))
 
 
 with app.app_context():
     db.create_all()
 
 # Razorpay credentials
-RAZORPAY_KEY_ID = "rzp_test_Zx8LGIelEeykil"
-RAZORPAY_KEY_SECRET = "ItvlyJgAUQ9JMpzldRQmomWb"
+RAZORPAY_KEY_ID = os.environ.get(
+    'RAZORPAY_KEY_ID')
+RAZORPAY_KEY_SECRET = os.environ.get(
+    'RAZORPAY_KEY_SECRET')
 
 # Initialize Razorpay client
 razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
