@@ -13,7 +13,7 @@ load_dotenv()
 app = Flask(__name__)
 
 secret_key = os.environ.get('secret_key')
-db_uri = os.environ.get('db_uri')
+db_uri = os.environ.get('db_uri2')
 
 app.config['SECRET_KEY'] = secret_key
 app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
@@ -35,9 +35,9 @@ class User(db.Model):
     school = db.Column(db.String(120), nullable=False)
     gName = db.Column(db.String(120), nullable=False)
     order_id = db.Column(db.String(120))
-    prevAtt = db.Column(db.String)
-    paymentStatus = db.Column(db.String)
-    ano = db.Column(db.String)
+    prevAtt = db.Column(db.String(2))
+    paymentStatus = db.Column(db.String(10))
+    ano = db.Column(db.String(100))
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(IST))
 
 
