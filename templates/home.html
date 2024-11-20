@@ -31,10 +31,6 @@
             font-weight: 700;
             font-style: normal;
         }
-
-
-
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -71,27 +67,53 @@
     </div>
 
     <div class="container">
-        <div style="border: 5px solid red; padding: 20px; align-self: center;">
-            
-                <h5>फॉर्म भरने के दिशा-निर्देश:</h5>
-                
+        <div style="border: 5px solid red; padding: 20px; align-self: center;">            
+                <h5>फॉर्म भरने के दिशा-निर्देश:</h5>                
                 <ul>
-                    <li><span>कृपया सभी जानकारी सही-सही भरें। <br>
-                        Please fill all the information correctly.</span></li>
+                    <li><p>
+                        <small>
+                            कृपया सभी जानकारी सही-सही भरें।<br>
+                            Please fill all the information correctly.
+                        </small>
+                    </p>
+                    </li>
                     
-                    <li><span>छात्र का आधार कार्ड ना होने पर अभिभावक का आधार संख्या प्रविष्ट करें। एक आधार कार्ड से एक ही छात्र का रजिस्ट्रेशन संभव है।<br>
-                        If the student does not have an Aadhaar card, enter the Aadhaar number of the guardian. Only one student can be registered with one Aadhaar card.</span></li>
+                    <li>
+                        <p>
+                            <small>
+                                छात्र का आधार कार्ड ना होने पर अभिभावक का आधार संख्या प्रविष्ट करें। एक आधार कार्ड से एक ही छात्र का रजिस्ट्रेशन संभव है।<br>
+                                If the student does not have an Aadhaar card, enter the Aadhaar number of the guardian. Only one student can be registered with one Aadhaar card.
+                            </small>
+                        </p>
+                    </li>
                     
-                    <li style="color: red;"><b>परीक्षा में भाग लेने का शुल्क ₹35 है। यह लघु शुल्क अवांछित कारकों को छाँटने लिए लगाया जा रहा है। यह शुल्क वापस नहीं किया जाएगा।<br>
-                        The fee for appearing in the exam is ₹35. This small fee is being charged to filter out unwanted factors. This fee is non-refundable.</b></li>
+                    <li style="color: red;">
+                        <p>
+                            <small>
+                                <b>परीक्षा में भाग लेने का शुल्क ₹35 है। यह लघु शुल्क अवांछित कारकों को छाँटने लिए लगाया जा रहा है। यह शुल्क वापस नहीं किया जाएगा।<br>
+                                The fee for appearing in the exam is ₹35. This small fee is being charged to filter out unwanted factors. This fee is non-refundable.</b>
+                            </small>
+                        </p>
+                    </li>
                     
-                    <li>कृप्या ई-मेल पता सही-सही दे। भुगतान की रसीद और प्रवेश पत्र इसी ई-मेल पते पर भेजा जायेगा। <br>
-                        Please provide correct email address. Payment receipt and admit card will be sent to this email address.</li>
+                    <li>
+                        <p>
+                            <small>
+                            कृप्या ई-मेल पता सही-सही दे। भुगतान की रसीद और प्रवेश पत्र इसी ई-मेल पते पर भेजा जायेगा। <br>
+                            Please provide correct email address. Payment receipt and admit card will be sent to this email address.
+                            </small>
+                        </p>
+                    </li>
                     
-                    <li><span>फॉर्म भरने के बाद उसकी स्थिति आधार संख्या देकर पता की जा सकती है।<br>
-                        After filling the form, its status can be known by providing Aadhaar number.</span></li>
-                </ul>
-             
+                    <li>
+                        <p>
+                            <small>
+                                फॉर्म भरने के बाद उसकी स्थिति आधार संख्या देकर पता की जा सकती है।<br>
+                                After filling the form, its status can be known by providing Aadhaar number.
+                            </small>
+                        </p>
+                    </li>
+                </ul>             
         </div>        
     </div>
     
@@ -195,27 +217,38 @@
             </table>
             <br>
             <div style="text-align: center;">
+                <label for="declar3">
+                    <p class="fs-6" style="font-family: 'Lato', sans-serif;">मैंने अपने द्वारा दी गई जानकारी की पुनः जांच कर ली है।<br>
+                    I have re-chacked the information provided by me.
+                    </p>
+                </label>
+                <br>
                 <input type="checkbox" name="declar3" required> <br>
-                <label for="declar3"><p class="h6">मैंने अपने द्वारा दी गई जानकारी की पुनः जांच कर ली है।<br>
-                    I have re-chacked the information provided by me.</p></label>
                     <br>
-                <input type="checkbox" name="declar1" required> <br>
-                <label for="declar1"><p class="h6">
+                <label for="declar1">
+                    <p class="fs-6" style="font-family: 'Lato', sans-serif;">
                     मेरे द्वारा दी गयी जानकारी मेरे अनुसार सही है। बाद में इस संबंध में किसी भी तरह कि विसंगति पाए जाने पर जिम्मेदारी मेरी होगी। <br>
                         The information given by me is correct according to me. If any discrepancy is found in this regard later, the responsibility will be mine.
-                </p></label>
+                    </p>
+                </label>
+                <br>
+                <input type="checkbox" name="declar1" required> <br>
+                <br>
+                <label for="declar2">
+                    <p class="fs-6" style="font-family: 'Lato', sans-serif;">मैं RMC को ₹35 के शुल्क का भुगतान अनुदान के रूप में स्वेच्छा से कर रहा/रही हूँ, और समझता/समझती हूँ कि ये शुल्क वापस नहीं किया जाएगा।<br>
+                    I am paying the fee of ₹35 to RMC voluntarily as a grant, and understand that it is non-refundable.
+                    </p>
+                </label>
                 <br>
                 <input type="checkbox" name="declar2" required> <br>
-                <label for="declar2"><p class="h6">मैं RMC को ₹35 के शुल्क का भुगतान अनुदान के रूप में स्वेच्छा से कर रहा/रही हूँ, और समझता/समझती हूँ कि ये शुल्क वापस नहीं किया जाएगा।<br>
-                    I am paying the fee of ₹35 to RMC voluntarily as a grant, and understand that it is non-refundable.</p></label>
             </div>
-            <div style="text-align: center;" class="mt-2">
+            <div style="text-align: center;" class="mt-4">
                 <button type="submit" class="btn btn-primary btn-lg btn-block">Pay ₹35 and Submit 🙂️</button> 
             </div>
         </form>
     </div>
 
-    <div class="mt-4 mb-5">
+    <div class="mt-5 mb-5">
         <div class="container">
             <form id="appStatus">
                 <label><p style="font-family: 'Ubuntu', sans-serif;"><b>अपनी आवेदन की स्थिति जाने<br>Know Your Application Status</b></p></label><br>
@@ -226,17 +259,28 @@
         </div>
     </div>
 
-    <div class="mt-4 mb-5">
-        <div style="text-align: center;" class="mt-2">
-        <p class="font-monospace">9472885701
-            <img src="{{ url_for('static', filename='telephone-x-fill.svg') }}" style="width:20px;height:20px;" alt="Chat Icon">
-            <img src="{{ url_for('static', filename='chat-left-dots-fill.svg') }}" style="width:20px;height:20px;" alt="Chat Icon">
-            <img src="{{ url_for('static', filename='whatsapp.svg') }}" style="width:20px;height:20px;" alt="Chat Icon">
-            <img src="{{ url_for('static', filename='telegram.svg') }}" style="width:20px;height:20px;" alt="Chat Icon">
-        </p>
-        <p class="font-monospace">rmctkg@gmail.com
-            <img src="{{ url_for('static', filename='envelope-at-fill.svg') }}" style="width:20px;height:20px;" alt="Chat Icon">
-        </p>
+    <hr class="my-4">
+
+    <div class="container" style="padding-right: 10%; padding-left: 10%;">
+        <div style="text-align: center; align-self: center; background-color: #e9ecef; padding: 3%;">
+
+            <p class="fs-5" style="font-family: 'Lato', sans-serif;">Connect With Us</p>
+            
+                <p class="font-monospace mt-3"><a href="tel:+919472885701">+91 9472885701</a>
+                    <img src="{{ url_for('static', filename='/images/telephone-x-fill.svg') }}" style="width:20px;height:20px;">
+                    <img src="{{ url_for('static', filename='/images/chat-left-dots-fill.svg') }}" style="width:20px;height:20px;">
+                    <img src="{{ url_for('static', filename='/images/whatsapp.svg') }}" style="width:20px;height:20px;">
+                    <img src="{{ url_for('static', filename='/images/telegram.svg') }}" style="width:20px;height:20px;">
+                </p>
+                <p class="font-monospace"><a href="mailto:rmctkg@gmail.com">rmctkg@gmail.com</a>
+                    <img src="{{ url_for('static', filename='/images/envelope-at-fill.svg') }}" style="width:20px;height:20px;">
+                </p>
+                <a href="https://fb.com/rmctkg">
+                    <p class="font-monospace">
+                        Follow us on <img src="{{ url_for('static', filename='/images/facebook.svg') }}" style="width:20px;height:20px;"> for updates.
+                    </p>
+                </a>
+            
         </div>
     </div>
     <hr class="my-4">
