@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, url_for
 from flask_sqlalchemy import SQLAlchemy
 # from sqlalchemy.sql import func
 # from sqlalchemy_utils import TimeZone
@@ -74,7 +74,7 @@ def validate_data():
 @app.route('/create_order', methods=['POST'])
 def create_order():
     # Amount in paise (e.g., ₹100.50 is 10050)
-    amount = 25 * 100
+    amount = 35 * 100
 
     # Create Razorpay order
     order = razorpay_client.order.create({
@@ -169,5 +169,8 @@ def save_in_databse():
     return jsonify({"status": "success", "message": "User added to the database"}), 200
 
 
-if __name__ == '__main__':
-    app.run(debug=False, host="0.0.0.0", port="5000")
+# if __name__ == '__main__':
+#     app.run(debug=False, host="0.0.0.0", port="5000")
+
+def create_app():
+    return app
