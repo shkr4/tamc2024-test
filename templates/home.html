@@ -219,7 +219,7 @@
             <div style="text-align: center;">
                 <label for="declar3">
                     <p class="fs-6" style="font-family: 'Lato', sans-serif;">मैंने अपने द्वारा दी गई जानकारी की पुनः जांच कर ली है।<br>
-                    I have re-chacked the information provided by me.
+                    I have re-checked the information provided by me.
                     </p>
                 </label>
                 <br>
@@ -243,7 +243,12 @@
                 <input type="checkbox" name="declar2" required> <br>
             </div>
             <div style="text-align: center;" class="mt-4">
-                <button type="submit" class="btn btn-primary btn-lg btn-block">Pay ₹35 and Submit 🙂️</button> 
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Pay ₹35 and Submit 🙂️</button>
+            </div>
+            <div style="text-align: center;" class="mt-2">
+                <div class="spinner-border text-primary" role="status" id="spinner" style="visibility: hidden;">
+                    <span class="sr-only"> </span>
+                </div>
             </div>
         </form>
     </div>
@@ -449,18 +454,36 @@
 
         const rzp = new Razorpay(options);
         rzp.open();
+
+        //spinner.style.visibility = "hidden"; // Hide spinner
+
         document.getElementById('myForm').reset();
         }
 </script>
 
 <script>
-    document.getElementById('myForm').addEventListener('submit', function(event) {
+    document.getElementById('myForm').addEventListener('submit', async function(event) {
             event.preventDefault(); // Prevent the default submission
-            validateAndPay();         
-            //document.getElementById('myForm').reset();
+            const a = new Audio("{{ url_for('static', filename='/music/click.mp3') }}");
+            a.play();
+            // Show the spinner
+            const spinner = document.getElementById('spinner');            
+            spinner.style.visibility = "visible"; 
+            try{
+                //await new Promise(resolve => setTimeout(resolve, 10000));
+                await validateAndPay();
+            } catch(error){
+                console.error("Payment script caused a problem:", error);
+                spinner.style.visibility = "hidden";
+            }finally{
+                spinner.style.visibility = "hidden";
+            }
+            
         });
         document.getElementById('appStatus').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent the default submission
+            const a = new Audio("{{ url_for('static', filename='/music/click.mp3') }}");
+            a.play();
             getStatus();
             
         });
