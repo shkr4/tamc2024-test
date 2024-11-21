@@ -295,6 +295,7 @@
 <script>
 
     async function getStatus(){
+        const bell = new Audio("{{ url_for('static', filename='/music/notification.mp3') }}");
         const aNoToBeEnquired = document.getElementById('anoEnquiry').value;
         const getStatusResponse = await fetch('/get_status',{
             method: 'POST',
@@ -306,7 +307,8 @@
 
         try {
             if (getStatusResponse.ok){
-            const responseData = await getStatusResponse.json(); 
+            const responseData = await getStatusResponse.json();
+            bell.play();
             alert(`आपका रजिस्ट्रेशन सफल हो गया है! / Your registration has been succesful!
             
             Name: ${responseData.name}
@@ -319,11 +321,13 @@
             }
             
             else {
+                bell.play();
                 alert("कोई विवरण उपलब्ध नहीं है। / No record found.")
             }
         } 
         
         catch (error) {
+            bell.play();
             alert("An error occurred: " + error.message);
         }
         
@@ -358,6 +362,7 @@
         if (phoneNumber.isValid() && validator.isEmail(email)) {
             console.log("Phone and Email are valid.")
         } else{
+            bell.play();
             alert("Phone number or Email is invalid")
             return -1
         }
@@ -373,6 +378,7 @@
         });
 
         if (anoValid.ok){
+            bell.play();
             alert("Aadhar No. has been used.");
             return -1;
         }
@@ -427,7 +433,8 @@
                         });
 
                         if (saveInDatabase.ok){
-                            console.log("Everything is ok")                            
+                            console.log("Everything is ok")
+                            bell.play();                          
                             alert("आपका रजिस्ट्रेशन सफल हो गया है! / Your registration has been succesful!")
                         }
                     } else {
