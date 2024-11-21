@@ -296,6 +296,7 @@
 
     async function getStatus(){
         const bell = new Audio("{{ url_for('static', filename='/music/notification.mp3') }}");
+        const bell2 = new Audio("{{ url_for('static', filename='/music/notification2.mp3') }}");
         const aNoToBeEnquired = document.getElementById('anoEnquiry').value;
         const getStatusResponse = await fetch('/get_status',{
             method: 'POST',
@@ -309,7 +310,10 @@
             if (getStatusResponse.ok){
             const responseData = await getStatusResponse.json();
             bell.play();
-            alert(`आपका रजिस्ट्रेशन सफल हो गया है! / Your registration has been succesful!
+            alert(`
+            
+            आपका रजिस्ट्रेशन सफल हो गया है!
+            Your registration has been succesful!
             
             Name: ${responseData.name}
             Guardian's Name: ${responseData.g_name}
@@ -321,19 +325,23 @@
             }
             
             else {
-                bell.play();
-                alert("कोई विवरण उपलब्ध नहीं है। / No record found.")
+                bell2.play();
+                alert(`
+                कोई विवरण उपलब्ध नहीं है।
+                No record found.`)
             }
         } 
         
         catch (error) {
-            bell.play();
+            bell2.play();
             alert("An error occurred: " + error.message);
         }
         
     }
 
     async function validateAndPay() {
+        const bell = new Audio("{{ url_for('static', filename='/music/notification.mp3') }}");
+        const bell2 = new Audio("{{ url_for('static', filename='/music/notification2.mp3') }}");
 
         //Getting the form data.        
 
@@ -362,8 +370,10 @@
         if (phoneNumber.isValid() && validator.isEmail(email)) {
             console.log("Phone and Email are valid.")
         } else{
-            bell.play();
-            alert("Phone number or Email is invalid")
+            bell2.play();
+            alert(`
+            फ़ोन नंबर या ईमेल अमान्य है।
+            Phone number or Email is invalid.`)
             return -1
         }
 
@@ -378,8 +388,10 @@
         });
 
         if (anoValid.ok){
-            bell.play();
-            alert("Aadhar No. has been used.");
+            bell2.play();
+            alert(`
+            इस आधार संख्या का उपयोग किया जा चुका है।
+            Aadhar No. has been used.`);
             return -1;
         }
         
@@ -435,12 +447,18 @@
                         if (saveInDatabase.ok){
                             console.log("Everything is ok")
                             bell.play();                          
-                            alert("आपका रजिस्ट्रेशन सफल हो गया है! / Your registration has been succesful!")
+                            alert(`
+                            आपका रजिस्ट्रेशन सफल हो गया है!
+                            Your registration has been succesful!`);
                         }
                     } else {
                         const errorData = await verifyResponse.json();
                         console.error("Payment verification failed", errorData);
                         // Handle failed verification (e.g., display error to user)
+                        bell2.play()
+                        alert(`
+                        भुगतान असफल रहा। दोबारा प्रयास करें।
+                        The Payment was unsuccessful. Please try again.`)
                     }
                     
                 },
