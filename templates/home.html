@@ -314,6 +314,7 @@
             Phone: ${responseData.phone}
             Email: ${responseData.email}
             Registered on: ${responseData.time}
+            
             `)
             }
             
@@ -455,17 +456,16 @@
         const rzp = new Razorpay(options);
         rzp.open();
 
-        //spinner.style.visibility = "hidden"; // Hide spinner
-
         document.getElementById('myForm').reset();
         }
 </script>
 
 <script>
     document.getElementById('myForm').addEventListener('submit', async function(event) {
-            event.preventDefault(); // Prevent the default submission
             const a = new Audio("{{ url_for('static', filename='/music/click.mp3') }}");
             a.play();
+            event.preventDefault(); // Prevent the default submission
+            
             // Show the spinner
             const spinner = document.getElementById('spinner');            
             spinner.style.visibility = "visible"; 
@@ -481,9 +481,10 @@
             
         });
         document.getElementById('appStatus').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the default submission
+            //event.preventDefault(); // Prevent the default submission
             const a = new Audio("{{ url_for('static', filename='/music/click.mp3') }}");
             a.play();
+            event.preventDefault(); // Prevent the default submission
             getStatus();
             
         });
