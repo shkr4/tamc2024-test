@@ -74,7 +74,7 @@ def validate_data():
 @app.route('/create_order', methods=['POST'])
 def create_order():
     # Amount in paise (e.g., ₹100.50 is 10050)
-    amount = 35 * 100
+    amount = 20 * 100
 
     # Create Razorpay order
     order = razorpay_client.order.create({
@@ -118,10 +118,10 @@ def get_status():
     if student:
         return {"name": student.name,
                 "g_name": student.gName,
+                "grade": student.grade,
                 "phone": student.ph[0:4]+"xxxxxx",
                 "email": "xxxxx"+student.email[5:],
-                "ano": student.ano,
-                "time": student.created_at
+                "time": str(student.created_at)[:-4]
                 }, 200
     else:
         return {"error": "Record not found"}, 404

@@ -88,12 +88,8 @@
                     </li>
                     
                     <li style="color: red;">
-                        <p>
-                            <small>
-                                <b>परीक्षा में भाग लेने का शुल्क ₹35 है। यह लघु शुल्क अवांछित कारकों को छाँटने लिए लगाया जा रहा है। यह शुल्क वापस नहीं किया जाएगा।<br>
-                                The fee for appearing in the exam is ₹35. This small fee is being charged to filter out unwanted factors. This fee is non-refundable.</b>
-                            </small>
-                        </p>
+                        <p><small><b>परीक्षा में भाग लेने का शुल्क कक्षा 6 के लिए ₹0 है और अन्य के लिए ₹20 है। यह लघु शुल्क अवांछित कारकों को छाँटने लिए लगाया जा रहा है। यह शुल्क वापस नहीं किया जाएगा।<br>                                  
+                        The fee for appearing in the exam is ₹0 for Class 6 and ₹20 for others. This small fee is being charged to filter out unwanted factors. This fee is non-refundable.</b></small></p>
                     </li>
                     
                     <li>
@@ -151,7 +147,7 @@
                         <p><b>कक्षा / Class:</b> </p>
                     </label></td>
                     <td><select name="grade" id="grade">
-                        <option value="6">6</option>
+                        <option value="6" selected>6</option>
                         <option value="7">7</option>
                         <option value="8">8</option>
                         <option value="9">9</option>
@@ -234,16 +230,18 @@
                 <br>
                 <input type="checkbox" name="declar1" required> <br>
                 <br>
-                <label for="declar2">
-                    <p class="fs-6" style="font-family: 'Lato', sans-serif;">मैं RMC को ₹35 के शुल्क का भुगतान अनुदान के रूप में स्वेच्छा से कर रहा/रही हूँ, और समझता/समझती हूँ कि ये शुल्क वापस नहीं किया जाएगा।<br>
-                    I am paying the fee of ₹35 to RMC voluntarily as a grant, and understand that it is non-refundable.
-                    </p>
-                </label>
-                <br>
-                <input type="checkbox" name="declar2" required> <br>
+                <div id="fee" style="display: none;">
+                    <label for="declar2">
+                        <p class="fs-6" style="font-family: 'Lato', sans-serif;">मैं RMC को ₹20 के शुल्क का भुगतान अनुदान के रूप में स्वेच्छा से कर रहा/रही हूँ, और समझता/समझती हूँ कि ये शुल्क वापस नहीं किया जाएगा।<br>
+                        I am paying the fee of ₹20 to RMC voluntarily as a grant, and understand that it is non-refundable.
+                        </p>
+                    </label>
+                    <br>
+                    <input type="checkbox" name="declar2" id="declar2"> <br>
+                </div>
             </div>
             <div style="text-align: center;" class="mt-4">
-                <button type="submit" class="btn btn-primary btn-lg btn-block">Pay ₹35 and Submit 🙂️</button>
+                <button type="submit" class="btn btn-primary btn-lg btn-block" id="submitButton">Submit 🙂️</button>
             </div>
             <div style="text-align: center;" class="mt-2">
                 <div class="spinner-border text-primary" role="status" id="spinner" style="visibility: hidden;">
@@ -260,6 +258,9 @@
         
                 <input type="number" id="anoEnquiry" placeholder="आधार सं० दर्ज करें / Enter Aadhaar No.">
                 <button type="submit">Submit</button>
+                <div class="spinner-border spinner-border-sm mt-2" role="status" id="spinner2" style="visibility: hidden;">
+                    <span class="sr-only">  </span>
+                </div>
             </form>
         </div>
     </div>
@@ -317,6 +318,7 @@
             
             Name: ${responseData.name}
             Guardian's Name: ${responseData.g_name}
+            Class: ${responseData.grade}
             Phone: ${responseData.phone}
             Email: ${responseData.email}
             Registered on: ${responseData.time}
@@ -394,6 +396,26 @@
             Aadhar No. has been used.`);
             return -1;
         }
+
+        if (grade === '6') {
+            const saveInDatabase = await fetch('/save_in_databse',{
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                            name:name, g_name:g_name, school:school, grade:grade, email:email, phone:phone,
+                            address: address, order_id:"no fee", prevAtt:prevAttV, ano:ano
+                        })
+                    });
+                    if (saveInDatabase.ok){
+                        console.log("Everything is ok")
+                        bell.play();                          
+                        alert(`
+                            आपका रजिस्ट्रेशन सफल हो गया है!
+                            Your registration has been succesful!`);
+                        return;
+                        }
+        }
+        
         
         ////////Entering the payment setup/////////
 
@@ -431,16 +453,8 @@
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                                 body: new URLSearchParams({
-                                name: name,
-                                g_name: g_name,
-                                school: school,
-                                grade: grade,
-                                email: email,
-                                phone: phone,
-                                address: address,
-                                order_id: order.id,
-                                prevAtt: prevAttV,
-                                ano:ano
+                                name:name, g_name:g_name, school:school, grade:grade, email:email, phone:phone,
+                                address: address, order_id:order.id, prevAtt:prevAttV, ano:ano
                             })
                         });
 
@@ -487,16 +501,20 @@
 
 <script>
     document.getElementById('myForm').addEventListener('submit', async function(event) {
+            
             const a = new Audio("{{ url_for('static', filename='/music/click.mp3') }}");
             a.play();
             event.preventDefault(); // Prevent the default submission
-            
             // Show the spinner
             const spinner = document.getElementById('spinner');            
-            spinner.style.visibility = "visible"; 
+            spinner.style.visibility = "visible";
+
+            const gradeValue = document.getElementById('grade').value;
+            
+             
             try{
-                //await new Promise(resolve => setTimeout(resolve, 10000));
-                await validateAndPay();
+                const validateAndPayStatus = await validateAndPay();
+                if (validateAndPayStatus){return;}
             } catch(error){
                 console.error("Payment script caused a problem:", error);
                 spinner.style.visibility = "hidden";
@@ -505,14 +523,39 @@
             }
             
         });
-        document.getElementById('appStatus').addEventListener('submit', function(event) {
-            //event.preventDefault(); // Prevent the default submission
+    document.getElementById('appStatus').addEventListener('submit', async function(event) {
             const a = new Audio("{{ url_for('static', filename='/music/click.mp3') }}");
             a.play();
-            event.preventDefault(); // Prevent the default submission
-            getStatus();
+            event.preventDefault();
+            const spinner = document.getElementById('spinner');            
+            spinner2.style.visibility = "visible"; 
+            try{
+                await getStatus();
+            } catch(error){
+                console.error("Payment script caused a problem:", error);
+                spinner2.style.visibility = "hidden";
+            }finally{
+                spinner2.style.visibility = "hidden";
+            }
             
         });
+    document.getElementById('grade').addEventListener('change', function() {
+        const gradeValue = this.value; // Get the selected value
+        const feeDiv = document.getElementById('fee'); // Get the fee div
+        const submitButton = document.getElementById('submitButton');
+        const declar2 = document.getElementById('declar2');
+
+        if (gradeValue === '6') {
+            declar2.required = false; // Remove required attribute
+            feeDiv.style.display = 'none'; // Hide the fee div
+            submitButton.innerHTML = "Submit 🙂️"; // Update button text
+        } else {
+            feeDiv.style.display = 'block'; // Show the fee div
+            declar2.required = true; // Add required attribute
+            submitButton.innerHTML = "Pay ₹20 and Submit 🙂️"; // Update button text
+        }
+    });
+
 </script>
 
 </body>
