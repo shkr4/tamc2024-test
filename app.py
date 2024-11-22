@@ -121,7 +121,7 @@ def get_status():
                 "grade": student.grade,
                 "phone": student.ph[0:4]+"xxxxxx",
                 "email": "xxxxx"+student.email[5:],
-                "time": str(student.created_at)[:-4]
+                "time": str(student.created_at)
                 }, 200
     else:
         return {"error": "Record not found"}, 404
