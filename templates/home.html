@@ -128,7 +128,7 @@
                     <td><label for="name">
                         <p><b>नाम / Name: </b></p>
                     </label></td>
-                    <td><input type="text" class="form-control" id="name" name="name" required><br>
+                    <td><input type="text" id="name" name="name" required><br>
                         
                     </td>
                 </tr>
@@ -137,7 +137,7 @@
                     <td><label for="g_name">
                         <p><b>अभिभावक का नाम / Guardian's Name:</b></p>
                     </label></td>
-                    <td><input type="text" class="form-control" id="g_name" name="g_name" required><br>
+                    <td><input type="text" id="g_name" name="g_name" required><br>
                         
                     </td>
                 </tr>
@@ -146,13 +146,7 @@
                     <td><label for="grade">
                         <p><b>कक्षा / Class:</b> </p>
                     </label></td>
-                    <td><select name="grade" id="grade">
-                        <option value="6" selected>6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                      </select><br>
+                    <td><input type="number" id="grade" min="6" max="10" required><br>
                         
                     </td>
                 </tr>
@@ -160,7 +154,7 @@
                     <td><label for="ph">
                         <p><b>मोबाईल / Mobile:</b> </p>
                     </label></td>
-                    <td><input type="number" class="form-control" name="ph" id="ph" required><br>
+                    <td><input type="number" name="ph" id="ph" required><br>
                         
                     </td>
                 </tr>
@@ -168,7 +162,7 @@
                     <td><label for="ano">
                         <p><b>आधार सं० / Aadhaar No.:</b> </p>
                     </label></td>
-                    <td><input type="number" class="form-control" id="ano" name="ano" required><br>
+                    <td><input type="number" id="ano" name="ano" required><br>
                         
                     </td>
                 </tr>
@@ -177,7 +171,7 @@
                         <p><b>ई-मेल / E-Mail:</b> </p>
                     </label></td>
                     <td>
-                        <input type="email" class="form-control" name="email" id="email" required><br>
+                        <input type="email" name="email" id="email" required><br>
                         
                     </td>
                 </tr>
@@ -185,7 +179,7 @@
                     <td><label for="school">
                         <p><b>विद्यालय / School:</b> </p>
                     </label></td>
-                    <td><input type="text" class="form-control" name="school" id="school" required><br></td>
+                    <td><input type="text" name="school" id="school" required><br></td>
                     <br>
                         
                     </td>
@@ -194,7 +188,7 @@
                     <td><label for="address">
                         <p><b>पता / Address:</b> </p>
                     </label></td>
-                    <td><textarea class="form-control" name="address" name="address" id="address" required></textarea></td>
+                    <td><textarea name="address" name="address" id="address" required></textarea></td>
                     <br>
                         
                     </td>
@@ -370,13 +364,13 @@
         const phoneNumber = libphonenumber.parsePhoneNumber(phone, 'IN');
 
         if (phoneNumber.isValid() && validator.isEmail(email)) {
-            console.log("Phone and Email are valid.")
+            console.log("Phone and Email are valid.");
         } else{
             bell2.play();
             alert(`
             फ़ोन नंबर या ईमेल अमान्य है।
-            Phone number or Email is invalid.`)
-            return -1
+            Phone number or Email is invalid.`);
+            return false;
         }
 
         //Validating AAdhar from backend
@@ -394,7 +388,7 @@
             alert(`
             इस आधार संख्या का उपयोग किया जा चुका है।
             Aadhar No. has been used.`);
-            return -1;
+            return false;
         }
 
         if (grade === '6') {
@@ -412,88 +406,90 @@
                         alert(`
                             आपका रजिस्ट्रेशन सफल हो गया है!
                             Your registration has been succesful!`);
-                        return;
+                        return true;
                         }
         }
         
+        else{    
         
-        ////////Entering the payment setup/////////
+            ////////Entering the payment setup/////////
 
-        // Create an order on the server
-        const order = await fetch('/create_order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            }).then(res => res.json());
+            // Create an order on the server
+            const order = await fetch('/create_order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                }).then(res => res.json());
 
-        const options = {
-                key: "{{ key_id }}",
-                amount: order.amount,
-                currency: order.currency,
-                name: "RMC",
-                description: "Payment for TAMC - 2024",
-                order_id: order.id,
-                
-                handler: async function (response) {
-                    // Send payment details for verification
-                            const verifyResponse = await fetch('/verify_payment', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                                body: new URLSearchParams({
-                                    orderID: order.id,
-                                    razorpay_order_id: response.razorpay_order_id,
-                                    razorpay_payment_id: response.razorpay_payment_id,
-                                    razorpay_signature: response.razorpay_signature
-                                })
-                            });
+            const options = {
+                    key: "{{ key_id }}",
+                    amount: order.amount,
+                    currency: order.currency,
+                    name: "RMC",
+                    description: "Payment for TAMC - 2024",
+                    order_id: order.id,
+                    
+                    handler: async function (response) {
+                        // Send payment details for verification
+                                const verifyResponse = await fetch('/verify_payment', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                    body: new URLSearchParams({
+                                        orderID: order.id,
+                                        razorpay_order_id: response.razorpay_order_id,
+                                        razorpay_payment_id: response.razorpay_payment_id,
+                                        razorpay_signature: response.razorpay_signature
+                                    })
+                                });
 
-                    if (verifyResponse.ok) { // Status code 200-299 indicates success
-                        const data = await verifyResponse.json();
-                        console.log("Payment verified successfully");
-                        const saveInDatabase = await fetch('/save_in_databse',{
+                        if (verifyResponse.ok) { // Status code 200-299 indicates success
+                            const data = await verifyResponse.json();
+                            console.log("Payment verified successfully");
+                            const saveInDatabase = await fetch('/save_in_databse',{
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                                 body: new URLSearchParams({
                                 name:name, g_name:g_name, school:school, grade:grade, email:email, phone:phone,
                                 address: address, order_id:order.id, prevAtt:prevAttV, ano:ano
-                            })
-                        });
+                                })
+                            });
 
-                        if (saveInDatabase.ok){
-                            console.log("Everything is ok")
-                            bell.play();                          
+                            if (saveInDatabase.ok){
+                                console.log("Everything is ok")
+                                bell.play();                          
+                                alert(`
+                                आपका रजिस्ट्रेशन सफल हो गया है!
+                                Your registration has been succesful!`);
+                            }
+                        } else {
+                            const errorData = await verifyResponse.json();
+                            console.error("Payment verification failed", errorData);
+                            // Handle failed verification (e.g., display error to user)
+                            bell2.play()
                             alert(`
-                            आपका रजिस्ट्रेशन सफल हो गया है!
-                            Your registration has been succesful!`);
+                            भुगतान असफल रहा। दोबारा प्रयास करें।
+                            The Payment was unsuccessful. Please try again.`)
                         }
-                    } else {
-                        const errorData = await verifyResponse.json();
-                        console.error("Payment verification failed", errorData);
-                        // Handle failed verification (e.g., display error to user)
-                        bell2.play()
-                        alert(`
-                        भुगतान असफल रहा। दोबारा प्रयास करें।
-                        The Payment was unsuccessful. Please try again.`)
+                        
+                    },
+                    method: {
+                        upi: true, // Enable UPI
+                        card: true, // Enable Cards
+                        wallet: true, // Enable Wallets
+                        netbanking: true // Enable Net Banking
+                    },
+                    prefill: { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+                        "name": name, //your customer's name
+                        "email": email,
+                        "contact": phone //Provide the customer's phone number for better conversion rates 
+                    },
+                    theme: {
+                        color: "#528FF0"
                     }
-                    
-                },
-                method: {
-                    upi: true, // Enable UPI
-                    card: true, // Enable Cards
-                    wallet: true, // Enable Wallets
-                    netbanking: true // Enable Net Banking
-                },
-                prefill: { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
-                    "name": name, //your customer's name
-                    "email": email,
-                    "contact": phone //Provide the customer's phone number for better conversion rates 
-                },
-                theme: {
-                    color: "#528FF0"
-                }
-            };
+                };
 
-        const rzp = new Razorpay(options);
-        rzp.open();
+            const rzp = new Razorpay(options);
+            rzp.open();
+        }
 
         document.getElementById('myForm').reset();
         }
@@ -539,7 +535,7 @@
             }
             
         });
-    document.getElementById('grade').addEventListener('change', function() {
+    document.getElementById('grade').addEventListener('input', function() {
         const gradeValue = this.value; // Get the selected value
         const feeDiv = document.getElementById('fee'); // Get the fee div
         const submitButton = document.getElementById('submitButton');
@@ -549,10 +545,12 @@
             declar2.required = false; // Remove required attribute
             feeDiv.style.display = 'none'; // Hide the fee div
             submitButton.innerHTML = "Submit 🙂️"; // Update button text
+            //console.log(gradeValue);
         } else {
             feeDiv.style.display = 'block'; // Show the fee div
             declar2.required = true; // Add required attribute
             submitButton.innerHTML = "Pay ₹20 and Submit 🙂️"; // Update button text
+            //console.log(gradeValue);
         }
     });
 
