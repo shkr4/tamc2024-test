@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, url_for
 from flask_sqlalchemy import SQLAlchemy
-# from sqlalchemy.sql import func
+from flask_mail import Mail, Message
 # from sqlalchemy_utils import TimeZone
 import razorpay
 from dotenv import load_dotenv
@@ -10,15 +10,29 @@ import pytz
 
 load_dotenv()
 
-app = Flask(__name__)
 
 secret_key = os.environ.get('secret_key')
 db_uri = os.environ.get('db_uri2')
+mailPort = int(os.environ.get('port'))
+mailServer = os.environ.get('server')
+mailUsername = os.environ.get('sender_email')
+mailPassword = os.environ.get('mailpasswd')
+
+app = Flask(__name__)
 
 app.config['SECRET_KEY'] = secret_key
 app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
+app.config['MAIL_SERVER'] = mailServer  # SMTP server (e.g., Gmail)
+# SMTP port (587 for TLS, 465 for SSL)
+app.config['MAIL_PORT'] = mailPort
+app.config['MAIL_USE_TLS'] = True             # Use TLS (True for port 587)
+app.config['MAIL_USE_SSL'] = False            # Use SSL (True for port 465)
+app.config['MAIL_USERNAME'] = mailUsername  # Your email address
+app.config['MAIL_PASSWORD'] = mailPassword        # Your email password
+app.config['MAIL_DEFAULT_SENDER'] = mailUsername  # Default sender email
 
 db = SQLAlchemy(app)
+mail = Mail(app)
 
 IST = pytz.timezone('Asia/Kolkata')
 
@@ -52,6 +66,28 @@ RAZORPAY_KEY_SECRET = os.environ.get(
 
 # Initialize Razorpay client
 razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
+
+
+def send_mail(name, grade, ano, oi, rec, g_name, address):
+    try:
+        msg = Message(
+            subject="Thank You for registering for TAMC-2024!",
+            recipients=[str(rec)],
+            body=f'''प्रिय छात्र, TAMC-2024 के लिए आपका आवेदन इस प्रकार प्राप्त हुआ है:
+            नाम / Name: {name}
+            अभिभावक का नाम / Guardian's Name: {g_name}
+            कक्षा / Class: {grade}
+            आधार / Aadhaar: {ano}
+            पता / Address: {address}
+            Order ID: {oi}
+
+हम जल्द ही आपके एडमिट कार्ड के साथ आपसे संपर्क करेंगे। :)
+            '''
+        )
+        mail.send(msg)
+        return True
+    except Exception as e:
+        return False
 
 
 @app.route('/')
@@ -170,17 +206,28 @@ def save_in_databse():
     prevAtt = data.get("prevAtt")
     ano = data.get("ano")
 
-    user = User(name=name, grade=grade, address=address, ph=ph,
-                email=email, school=school, gName=g_name, order_id=order_id, prevAtt=prevAtt, paymentStatus="paid", ano=ano)
+    try:
+        user = User(name=name, grade=grade, address=address, ph=ph,
+                    email=email, school=school, gName=g_name, order_id=order_id, prevAtt=prevAtt, paymentStatus="paid", ano=ano)
 
-    db.session.add(user)
-    db.session.commit()
+        db.session.add(user)
+        db.session.commit()
 
-    return jsonify({"status": "success", "message": "User added to the database"}), 200
+        mailSent = send_mail(name, grade, ano, order_id,
+                             email, g_name, address)
+
+        if mailSent:
+            return jsonify({"status": "success", "message": ("User added to the database", "Mail sent.")}), 200
+        else:
+            return jsonify({"status": "success", "message": ("User added to the database", "Mail not sent.")}), 200
+    except Exception as e:
+        db.session.rollback()  # Roll back for any unexpected error
+        return jsonify(error="UnexpectedError", message=str(e)), 500
 
 
-# if __name__ == '__main__':
-#     app.run(debug=False, host="0.0.0.0", port="5000")
+if __name__ == '__main__':
+    app.run(debug=False, host="0.0.0.0", port="5000")
+
 
 def create_app():
     return app
