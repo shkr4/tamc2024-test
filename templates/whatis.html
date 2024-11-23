@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}TAMC At a Glance{% endblock %}
+
+{% block content %}
+
+<div class="container mb-5" style="padding-right: 10%; padding-left: 10%; padding-top: 3%;">
+  <div style="text-align: center; align-self: center;"> 
+    <h1>RMC / TAMC एक नजर मे</h1>
+    <h1>RMC / TAMC at a Glance</h1>
+  </div>
+</div>
+
+<div class="container mb-5" style="padding-right: 10%; padding-left: 10%;">
+  <div id="carouselExampleIndicators" class="carousel slide">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{{url_for('static', filename='/images/whatisrmch.jpg')}}" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="{{url_for('static', filename='/images/whatisrmc.jpg')}}" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="{{url_for('static', filename='/images/whatistamch.jpg')}}" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="{{url_for('static', filename='/images/whatistamc.jpg')}}" class="d-block w-100" alt="...">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</div>
+
+<div class="container mb-5" style="padding-right: 20%; padding-left: 20%;">
+  <div class="border border-dark" style="text-align: center; align-self: center; background-color: #e9ecef; padding: 3%;"> 
+      
+          <p class="font-monospace">
+            <a class="link-offset-2 link-underline link-underline-opacity-100" href="https://rmctkg.wordpress.com/2023/12/26/thakurganj-annual-mathematics-contest-2022/">
+              TAMC-2022
+            </a>              
+          </p>
+          
+          <p class="font-monospace">
+            <a class="link-offset-2 link-underline link-underline-opacity-100" href="https://rmctkg.wordpress.com/2023/12/31/thakurganj-annual-mathematics-contest-2023/">
+              TAMC-2023
+            </a>              
+          </p>
+          <p class="font-monospace">
+            <a class="link-offset-2 link-underline link-underline-opacity-100" href="https://rmctkg.wordpress.com/2024/01/12/tamc-previous-years-papers/">
+              Previous Years Papers
+            </a>                  
+          </p>
+          <p class="font-monospace mt-5"><a href="{{url_for('index')}}">फॉर्म पृष्ठ पर जाऐं</a></p>
+          <p class="font-monospace"><a href="{{url_for('index')}}">Go to form page</a></p>
+          
+      
+  </div>
+</div>
+
+
+{% endblock %}

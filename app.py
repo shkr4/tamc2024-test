@@ -59,6 +59,16 @@ def index():
     return render_template('home.html', key_id=RAZORPAY_KEY_ID)
 
 
+@app.get('/what_is')
+def what_is():
+    return render_template('whatis.html')
+
+
+@app.get('/rules')
+def rules():
+    return render_template('rules.html')
+
+
 @app.post('/validate_data')
 def validate_data():
     data = request.form

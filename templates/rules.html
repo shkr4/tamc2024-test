@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %} {% endblock %}
+
+{%block content %}
+
+<div class="container mb-5" style="padding-right: 10%; padding-left: 10%; padding-top: 3%;">
+    <div style="text-align: center; align-self: center;"> 
+      <h1>मूल्यांकन और अंकन के नियम</h1>
+      <h1>Rules of Evaluation and Marking</h1>
+    </div>
+  </div>
+
+<div class="container mb-5" style="padding-right: 10%; padding-left: 10%; padding-top: 1%;">
+    <div style="text-align: center; align-self: center;"> 
+      <img src="{{url_for('static', filename='/images/equity.jpg')}}" alt="photo" width="200" height="150"">
+    </div>
+  </div>
+<div style="text-align: center; align-self: center; padding-right: 10%; padding-left: 10%;">
+    <div class="alert alert-warning" role="alert">
+        <p class="fs-6 text" style="font-family: 'Lato', sans-serif;">
+            पिछले साल के सुझावों को ध्यान में रखकर ये निश्चित किया गया है कि #TAMC2024 में छठी कक्षा के विद्यार्थियों को 30%,
+            सातवीं कक्षा के विद्यार्थियों को 20%, आठवीं को कक्षा के विद्यार्थियों को 10% और नवीं के विद्यार्थियों को 5% नंबर बढ़ा कर दिए जायेंगे।
+            अर्थात अगर परीक्षा में आपके x नंबर आते हैं तो कक्षा के अनुसार आपको x + x का (30/20/10/5)% दिए जाएंगे, और यही समायोजित नंबर पुरस्कार के लिए निर्णायक होंगे।
+            यह अंकन प्रणाली "सभी के लिए समान अवसर" को ध्यान में रखते हुए बनाई गई है।
+        </p>
+    
+        <p class="fs-6 text" style="font-family: 'Lato', sans-serif;">
+            <b>मूल्यांकन, मार्किंग एवं पुरस्कार के संबंध में RMC का निर्णय अंतिम होगा।</b></p>
+    </div>
+    <div class="alert alert-warning" role="alert">
+        <p class="fs-6 text" style="font-family: 'Ubuntu', sans-serif;">
+            Keeping in mind the suggestions of the last year, it has been decided that in #TAMC2024,
+            marks will be increased by 30% for class 6 students, 20% for class 7 students, 10% for class 8 students and 5% for class 9 students.
+            That is, if you get x marks in the exam then you will be given x + (30/20/10/5)% of x as per the class, and
+            these adjusted marks will be decisive for the award.
+            This marking system has been made keeping in mind “equal opportunities for all”.
+        </p>
+        <p class="fs-6 text" style="font-family: 'Ubuntu', sans-serif;">
+            <b>In regard of evaluation, marking and prize, the decision of RMC will be final.</b>
+        </p>
+    </div>
+    
+</div>
+<div class="container mb-3" style="padding-right: 20%; padding-left: 20%;">
+    <div class="border border-dark" style="text-align: center; align-self: center; background-color: #e9ecef;">
+        <p class="font-monospace mt-5"><a href="{{url_for('index')}}">फॉर्म पृष्ठ पर जाऐं</a></p>
+        <p class="font-monospace"><a href="{{url_for('index')}}">Go to form page</a></p>
+    </div>
+</div>
+{% endblock %}
