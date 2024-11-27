@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
-from flask_migrate import Migrate
+# from flask_migrate import Migrate
 import razorpay
 from dotenv import load_dotenv
 import os
