@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
-# from sqlalchemy_utils import TimeZone
+from flask_migrate import Migrate
 import razorpay
 from dotenv import load_dotenv
 import os
@@ -22,17 +22,17 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = secret_key
 app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
-app.config['MAIL_SERVER'] = mailServer  # SMTP server (e.g., Gmail)
-# SMTP port (587 for TLS, 465 for SSL)
+app.config['MAIL_SERVER'] = mailServer
 app.config['MAIL_PORT'] = mailPort
-app.config['MAIL_USE_TLS'] = True             # Use TLS (True for port 587)
-app.config['MAIL_USE_SSL'] = False            # Use SSL (True for port 465)
-app.config['MAIL_USERNAME'] = mailUsername  # Your email address
-app.config['MAIL_PASSWORD'] = mailPassword        # Your email password
-app.config['MAIL_DEFAULT_SENDER'] = mailUsername  # Default sender email
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = mailUsername
+app.config['MAIL_PASSWORD'] = mailPassword
+app.config['MAIL_DEFAULT_SENDER'] = mailUsername
 
 db = SQLAlchemy(app)
 mail = Mail(app)
+migrate = Migrate(app, db)
 
 IST = pytz.timezone('Asia/Kolkata')
 
@@ -53,6 +53,12 @@ class User(db.Model):
     paymentStatus = db.Column(db.String(10))
     ano = db.Column(db.String(100))
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(IST))
+    ip = db.Column(db.String(50))
+
+
+class Counter(db.Model):
+    ID = db.Column(db.Integer, primary_key=True)
+    count = db.Column(db.Integer, default=0)
 
 
 with app.app_context():
@@ -73,15 +79,17 @@ def send_mail(name, grade, ano, oi, rec, g_name, address):
         msg = Message(
             subject="Thank You for registering for TAMC-2024!",
             recipients=[str(rec)],
-            body=f'''प्रिय छात्र, TAMC-2024 के लिए आपका आवेदन इस प्रकार प्राप्त हुआ है:
-            नाम / Name: {name}
-            अभिभावक का नाम / Guardian's Name: {g_name}
-            कक्षा / Class: {grade}
-            आधार / Aadhaar: {ano}
-            पता / Address: {address}
-            Order ID: {oi}
+            html=f'''<h4>प्रिय छात्र, TAMC-2024 के लिए आपका आवेदन इस प्रकार प्राप्त हुआ है:</h4>
+            <p>
+            नाम / Name: <b>{name}</b><br>
+            अभिभावक का नाम / Guardian's Name: <b>{g_name}</b><br>
+            कक्षा / Class: <b>{grade}</b><br>
+            आधार / Aadhaar: <b>{ano}</b><br>
+            पता / Address: <b>{address}</b><br>
+            Order ID: <b>{oi}</b>
+            </p>
 
-हम जल्द ही आपके एडमिट कार्ड के साथ आपसे संपर्क करेंगे। :)
+<h5>हम जल्द ही आपके एडमिट कार्ड के साथ आपसे संपर्क करेंगे।</h5> :)
             '''
         )
         mail.send(msg)
@@ -90,8 +98,19 @@ def send_mail(name, grade, ano, oi, rec, g_name, address):
         return False
 
 
+def countReload():
+    visitorNumber = Counter.query.first()
+    if visitorNumber is None:
+        # Assuming 'count' column exists
+        visitorNumber = Counter(count=1)
+        db.session.add(visitorNumber)
+    visitorNumber.count = visitorNumber.count + 1
+    db.session.commit()
+
+
 @app.route('/')
 def index():
+    countReload()
     return render_template('home.html', key_id=RAZORPAY_KEY_ID)
 
 
@@ -205,16 +224,18 @@ def save_in_databse():
     order_id = data.get("order_id")
     prevAtt = data.get("prevAtt")
     ano = data.get("ano")
+    ip = request.remote_addr
 
     try:
         user = User(name=name, grade=grade, address=address, ph=ph,
-                    email=email, school=school, gName=g_name, order_id=order_id, prevAtt=prevAtt, paymentStatus="paid", ano=ano)
+                    email=email, ip=ip, school=school, gName=g_name, order_id=order_id, prevAtt=prevAtt, paymentStatus="paid", ano=ano)
 
         db.session.add(user)
         db.session.commit()
 
         mailSent = send_mail(name, grade, ano, order_id,
                              email, g_name, address)
+        # mailSent = True
 
         if mailSent:
             return jsonify({"status": "success", "message": ("User added to the database", "Mail sent.")}), 200
@@ -223,6 +244,29 @@ def save_in_databse():
     except Exception as e:
         db.session.rollback()  # Roll back for any unexpected error
         return jsonify(error="UnexpectedError", message=str(e)), 500
+
+
+@app.get('/getdata')
+def getData():
+    totalStudents = User.query.count()
+    totalReload = Counter.query.first().count
+    totalClassSixStudent = User.query.filter(User.grade == '6').count()
+    totalClassSevenStudent = User.query.filter(User.grade == '7').count()
+    totalClassEightStudent = User.query.filter(User.grade == '8').count()
+    totalClassNineStudent = User.query.filter(User.grade == '9').count()
+    totalClassTenStudent = User.query.filter(User.grade == '10').count()
+
+    dic = {
+        "Total Students": totalStudents,
+        "Class 6": f'{totalClassSixStudent}; {(totalClassSixStudent*100)/totalStudents}% of total students.',
+        "Class 7": f'{totalClassSevenStudent}; {(totalClassSevenStudent*100)/totalStudents}% of total students.',
+        "Class 8": f'{totalClassEightStudent}; {(totalClassEightStudent*100)/totalStudents}% of total students.',
+        "Class 9": f'{totalClassNineStudent}; {(totalClassNineStudent*100)/totalStudents}% of total students.',
+        "Class 10": f'{totalClassTenStudent}; {(totalClassTenStudent*100)/totalStudents}% of total students.',
+        "Expected Fee Collection": f'₹{20*(totalStudents - totalClassSixStudent)}',
+        "Total Main Page Reload": totalReload
+    }
+    return jsonify(dic)
 
 
 if __name__ == '__main__':
