@@ -32,7 +32,7 @@ app.config['MAIL_DEFAULT_SENDER'] = mailUsername
 
 db = SQLAlchemy(app)
 mail = Mail(app)
-migrate = Migrate(app, db)
+# migrate = Migrate(app, db)
 
 IST = pytz.timezone('Asia/Kolkata')
 
