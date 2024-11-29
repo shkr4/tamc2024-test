@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, jsonify, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
-# from flask_migrate import Migrate
 import razorpay
 from dotenv import load_dotenv
 import os
@@ -32,7 +31,6 @@ app.config['MAIL_DEFAULT_SENDER'] = mailUsername
 
 db = SQLAlchemy(app)
 mail = Mail(app)
-# migrate = Migrate(app, db)
 
 IST = pytz.timezone('Asia/Kolkata')
 
@@ -256,17 +254,17 @@ def getData():
     totalClassNineStudent = User.query.filter(User.grade == '9').count()
     totalClassTenStudent = User.query.filter(User.grade == '10').count()
 
-    dic = {
-        "Total Students": totalStudents,
-        "Class 6": f'{totalClassSixStudent}; {(totalClassSixStudent*100)/totalStudents}% of total students.',
-        "Class 7": f'{totalClassSevenStudent}; {(totalClassSevenStudent*100)/totalStudents}% of total students.',
-        "Class 8": f'{totalClassEightStudent}; {(totalClassEightStudent*100)/totalStudents}% of total students.',
-        "Class 9": f'{totalClassNineStudent}; {(totalClassNineStudent*100)/totalStudents}% of total students.',
-        "Class 10": f'{totalClassTenStudent}; {(totalClassTenStudent*100)/totalStudents}% of total students.',
-        "Expected Fee Collection": f'₹{20*(totalStudents - totalClassSixStudent)}',
-        "Total Main Page Reload": totalReload
-    }
-    return jsonify(dic)
+    info = f'''<p>
+        Total Students: {totalStudents}
+        Class 6: {totalClassSixStudent}; {round((totalClassSixStudent*100)/totalStudents,2)}% of total students.
+        Class 7: {totalClassSevenStudent}; {round((totalClassSevenStudent*100)/totalStudents,2)}% of total students.
+        Class 8: {totalClassEightStudent}; {round((totalClassEightStudent*100)/totalStudents,2)}% of total students.
+        Class 9: {totalClassNineStudent}; {round((totalClassNineStudent*100)/totalStudents,2)}% of total students.
+        Class 10: {totalClassTenStudent}; {round((totalClassTenStudent*100)/totalStudents,2)}% of total students.
+        Expected Fee Collection: ₹{20*(totalStudents - totalClassSixStudent)},
+        Total Main Page Reload: {totalReload}</p>
+    '''
+    return info
 
 
 if __name__ == '__main__':
