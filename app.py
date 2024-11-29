@@ -254,17 +254,22 @@ def getData():
     totalClassNineStudent = User.query.filter(User.grade == '9').count()
     totalClassTenStudent = User.query.filter(User.grade == '10').count()
 
-    info = f'''<p>
-        Total Students: {totalStudents}
-        Class 6: {totalClassSixStudent}; {round((totalClassSixStudent*100)/totalStudents,2)}% of total students.
-        Class 7: {totalClassSevenStudent}; {round((totalClassSevenStudent*100)/totalStudents,2)}% of total students.
-        Class 8: {totalClassEightStudent}; {round((totalClassEightStudent*100)/totalStudents,2)}% of total students.
-        Class 9: {totalClassNineStudent}; {round((totalClassNineStudent*100)/totalStudents,2)}% of total students.
-        Class 10: {totalClassTenStudent}; {round((totalClassTenStudent*100)/totalStudents,2)}% of total students.
-        Expected Fee Collection: ₹{20*(totalStudents - totalClassSixStudent)},
+    info = f'''<p style="padding: 20%">
+        Total Students: {totalStudents} <br><br>
+        Class 6: {totalClassSixStudent}; {round((totalClassSixStudent*100)/totalStudents,2)}% of total students. <br>
+        Class 7: {totalClassSevenStudent}; {round((totalClassSevenStudent*100)/totalStudents,2)}% of total students. <br>
+        Class 8: {totalClassEightStudent}; {round((totalClassEightStudent*100)/totalStudents,2)}% of total students. <br>
+        Class 9: {totalClassNineStudent}; {round((totalClassNineStudent*100)/totalStudents,2)}% of total students. <br>
+        Class 10: {totalClassTenStudent}; {round((totalClassTenStudent*100)/totalStudents,2)}% of total students. <br><br>
+        Expected Fee Collection: ₹{20*(totalStudents - totalClassSixStudent)}. <br><br>
         Total Main Page Reload: {totalReload}</p>
     '''
     return info
+
+
+@app.get('/tc')
+def tc():
+    return render_template('tc.html')
 
 
 if __name__ == '__main__':
