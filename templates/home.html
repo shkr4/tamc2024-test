@@ -478,7 +478,7 @@
 
                         if (verifyResponse.ok) { // Status code 200-299 indicates success
                             const data = await verifyResponse.json();
-                            console.log("Payment verified successfully");
+                            console.log(data);
                             const saveInDatabase = await fetch('/save_in_databse',{
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

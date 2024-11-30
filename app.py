@@ -4,6 +4,7 @@ from flask_mail import Mail, Message
 import razorpay
 from dotenv import load_dotenv
 import os
+import requests
 from datetime import datetime
 import pytz
 
@@ -164,11 +165,24 @@ def verify_payment(data):
 
 def verify_status(order_id):
     """Verify payment status using Razorpay order ID."""
-    try:
-        order = razorpay_client.order.fetch(order_id)
-        return order.get("status") == "paid"
-    except razorpay.errors.BadRequestError:
+
+    url = f'https://api.razorpay.com/v1/orders/{order_id}'
+    auth = (RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET)  # Tuple of Key ID and Secret
+
+    response = requests.get(url, auth=auth)
+    if response.status_code == 200:
+        print(response.json()['status'])
+        if response.json()['status'] in ['captured', 'paid']:
+            return True
         return False
+    else:
+        return False
+
+    # try:
+    #     order = razorpay_client.order.fetch(order_id)
+    #     return order.get("status") == "paid"
+    # except razorpay.errors.BadRequestError:
+    #     return False
 
 
 @app.route('/get_status', methods=['POST'])
@@ -202,10 +216,12 @@ def verify_all():
     is_payment_valid = verify_payment(data)
     is_status_paid = verify_status(order_id)
 
-    if is_payment_valid and is_status_paid:
-        return jsonify({"status": "success", "message": "Payment verified successfully"}), 200
-    else:
-        return jsonify({"status": "failure", "message": "Payment verification failed"}), 400
+    if is_status_paid:
+        if is_payment_valid:
+            return jsonify({"status": "success", "message": "Amount paid and payment verified successfully"}), 200
+        else:
+            return jsonify({"status": "success", "message": "Amount paid but payment NOT verified successfully"}), 200
+    return jsonify({"status": "failure", "message": "Payment verification failed"}), 400
 
 
 @app.route('/save_in_databse', methods=['POST'])
