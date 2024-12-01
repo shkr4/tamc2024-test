@@ -84,8 +84,8 @@
 
                     <li><p>
                         <small>
-                            कृपया सभी जानकारी सही-सही भरें।<br>
-                            Please fill all the information correctly.
+                            कृपया सभी जानकारी सही-सही भरें। फॉर्म भरने के लिए केवल <b>अंग्रेजी अक्षरों</b> का प्रयोग करें।<br>
+                            Please fill all the information correctly. Use only <b>English alphabets</b> to fill up the form.
                         </small>
                     </p>
                     </li>
@@ -258,10 +258,11 @@
             <div style="text-align: center;" class="mt-4">
                 <button type="submit" class="btn btn-primary btn-lg btn-block" id="submitButton">Submit 🙂️</button>
             </div>
-            <div style="text-align: center;" class="mt-2">
-                <div class="spinner-border text-primary" role="status" id="spinner" style="visibility: hidden;">
+            <div style="text-align: center; visibility: hidden;" class="mt-2" id="spinner">
+                <div class="spinner-border text-danger" role="status">
                     <span class="sr-only"> </span>
                 </div>
+                <br> <p style="font-size: 0.7em; color: red"> <b>भुगतान हो रहा है कृपया प्रतिक्षा करें। / Please wait the payment is being processed.</b></p>
             </div>
         </form>
     </div>
@@ -309,8 +310,6 @@
         </div>
     </div>
     <hr class="my-4">
-
-
 
 <script>
 
@@ -432,16 +431,25 @@
                         console.log("Everything is ok")
                         bell.play();                          
                         alert(`
-                            आपका रजिस्ट्रेशन सफल हो गया है!
-                            Your registration has been succesful!
-                            
-                            आपको इस संबंध में एक ई-मेल प्राप्त होगा। (स्पेम फोल्डर देखें)
-                            You will get an email in this regard. (Check spam folder)
-
-                            `);
+                    आपका रजिस्ट्रेशन सफल हो गया है! आपको इस संबंध में एक ई-मेल प्राप्त होगा। (स्पेम फोल्डर देखें)
+                    
+                    Your registration has been succesful! You will get an email in this regard. (Check spam folder)
+                        `);
                         spinner.style.visibility = "hidden";
                         document.getElementById('myForm').reset()
                         return true;
+                        }
+                        else{
+                            console.log("This user has to be added manually. Email Triggered.")
+                            bell.play();                          
+                            alert(`
+                    आपका रजिस्ट्रेशन सफल हो गया है! आपको एक ईमेल मिलेगा। आपका आधार अपडेट किया जा रहा है, कृपया अपनी स्थिति जानने से पहले कुछ समय प्रतीक्षा करें।
+                        
+                    Your registration has been succesful! You'll get an email. Your Aadhar is being updated please wait sometime before querying your status.
+                            `);
+                            document.getElementById('myForm').reset()
+                            spinner.style.visibility = "hidden";
+                            return true;
                         }
         }
         
@@ -492,8 +500,21 @@
                                 console.log("Everything is ok")
                                 bell.play();                          
                                 alert(`
-                                आपका रजिस्ट्रेशन सफल हो गया है!
-                                Your registration has been succesful!`);
+                            आपका रजिस्ट्रेशन सफल हो गया है!
+                            
+                            Your registration has been succesful!
+                                `);
+                                document.getElementById('myForm').reset()
+                                spinner.style.visibility = "hidden";
+                                return true;
+                            }
+                            else{
+                                console.log("This user has to be added manually. Email Triggered.")
+                                bell.play();                          
+                                alert(`
+                        आपका रजिस्ट्रेशन सफल हो गया है! आपको एक ईमेल मिलेगा। आपका आधार अपडेट किया जा रहा है, कृपया अपनी स्थिति जानने से पहले कुछ समय प्रतीक्षा करें।
+                            
+                        Your registration has been succesful! You'll get an email. Your aadhar is being updated please wait sometime before querying your status.`);
                                 document.getElementById('myForm').reset()
                                 spinner.style.visibility = "hidden";
                                 return true;
@@ -504,8 +525,9 @@
                             // Handle failed verification (e.g., display error to user)
                             bell2.play()
                             alert(`
-                            भुगतान असफल रहा। दोबारा प्रयास करें।
-                            The Payment was unsuccessful. Please try again.`)
+                        भुगतान असफल रहा। दोबारा प्रयास करें।
+                        
+                        The Payment was unsuccessful. Please try again.`)
                             spinner.style.visibility = "hidden";
                             return false;
                         }
@@ -529,8 +551,7 @@
 
             const rzp = new Razorpay(options);
             rzp.open();
-        }
-        document.getElementById('myForm').reset()       
+        }       
     }
 </script>
 

@@ -97,6 +97,21 @@ def send_mail(name, grade, ano, oi, rec, g_name, address):
         return False
 
 
+def send_mail_manually(name, grade, address, ph, email, ip, school, g_name, order_id, prevAtt, ano):
+    try:
+        msg = Message(
+            subject="Add user manually",
+            recipients=['rmctkg@gmail.com'],
+            html=f'''INSERT INTO user(name,grade,address,ph,email,school,gName,order_id,prevAtt,paymentStatus,ano,created_at,ip)
+            VALUES("{name}","{grade}","{address}","{ph}","{email}","{school}","{g_name}","{order_id}","{prevAtt}","paid","{ano}","{str(datetime.now(IST))}","{ip}");
+            '''
+        )
+        mail.send(msg)
+        return True
+    except Exception as e:
+        return False
+
+
 def countReload():
     visitorNumber = Counter.query.first()
     if visitorNumber is None:
@@ -238,7 +253,7 @@ def save_in_databse():
     order_id = data.get("order_id")
     prevAtt = data.get("prevAtt")
     ano = data.get("ano")
-    ip = request.remote_addr
+    ip = 0
 
     try:
         user = User(name=name, grade=grade, address=address, ph=ph,
@@ -257,6 +272,10 @@ def save_in_databse():
             return jsonify({"status": "success", "message": ("User added to the database", "Mail not sent.")}), 200
     except Exception as e:
         db.session.rollback()  # Roll back for any unexpected error
+        send_mail(name, grade, ano, order_id,
+                  email, g_name, address)
+        send_mail_manually(name, grade, address, ph, email,
+                           ip, school, g_name, order_id, prevAtt, ano)
         return jsonify(error="UnexpectedError", message=str(e)), 500
 
 
@@ -270,7 +289,7 @@ def getData():
     totalClassNineStudent = User.query.filter(User.grade == '9').count()
     totalClassTenStudent = User.query.filter(User.grade == '10').count()
 
-    info = f'''<p style="padding: 20%">
+    info = f'''<h3 style="padding: 20%">
         Total Students: {totalStudents} <br><br>
         Class 6: {totalClassSixStudent}; {round((totalClassSixStudent*100)/totalStudents,2)}% of total students. <br>
         Class 7: {totalClassSevenStudent}; {round((totalClassSevenStudent*100)/totalStudents,2)}% of total students. <br>
@@ -278,7 +297,7 @@ def getData():
         Class 9: {totalClassNineStudent}; {round((totalClassNineStudent*100)/totalStudents,2)}% of total students. <br>
         Class 10: {totalClassTenStudent}; {round((totalClassTenStudent*100)/totalStudents,2)}% of total students. <br><br>
         Expected Fee Collection: ₹{20*(totalStudents - totalClassSixStudent)}. <br><br>
-        Total Main Page Reload: {totalReload}</p>
+        Total Main Page Reload: {totalReload}</h3>
     '''
     return info
 
