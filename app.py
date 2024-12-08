@@ -97,6 +97,31 @@ def send_mail(name, grade, ano, oi, rec, g_name, address):
         return False
 
 
+def send_mail2(name, grade, ano, oi, rec, g_name, address):
+    try:
+        msg = Message(
+            subject="Thank You for registering for TAMC-2024!",
+            recipients=[str(rec)],
+            html=f'''<h4>प्रिय छात्र, TAMC-2024 के लिए आपका आवेदन इस प्रकार प्राप्त हुआ है:</h4>
+            <p>
+            नाम / Name: <b>{name}</b><br>
+            अभिभावक का नाम / Guardian's Name: <b>{g_name}</b><br>
+            कक्षा / Class: <b>{grade}</b><br>
+            आधार / Aadhaar: <b>{ano}</b><br>
+            पता / Address: <b>{address}</b><br>
+            Order ID: <b>{oi}</b>
+            </p>
+
+<h4>हम जल्द ही आपके एडमिट कार्ड के साथ आपसे संपर्क करेंगे।</h4>
+<h5>आपका आवेदन सफल हो चुका है। आपको दुबारा प्रयास करने कि आवश्यकता नहीं है, थोड़ी देर में डाटाबेस आपके विवरण के साथ अपडेट किया जाऐगा, उसके बाद आधार नंबर के साथ आपका विवरण उपलब्ध होगा।</h5> :)
+            '''
+        )
+        mail.send(msg)
+        return True
+    except Exception as e:
+        return False
+
+
 def send_mail_manually(name, grade, address, ph, email, ip, school, g_name, order_id, prevAtt, ano):
     try:
         msg = Message(
@@ -272,8 +297,8 @@ def save_in_databse():
             return jsonify({"status": "success", "message": ("User added to the database", "Mail not sent.")}), 200
     except Exception as e:
         db.session.rollback()  # Roll back for any unexpected error
-        send_mail(name, grade, ano, order_id,
-                  email, g_name, address)
+        send_mail2(name, grade, ano, order_id,
+                   email, g_name, address)
         send_mail_manually(name, grade, address, ph, email,
                            ip, school, g_name, order_id, prevAtt, ano)
         return jsonify(error="UnexpectedError", message=str(e)), 500
