@@ -150,7 +150,7 @@ def countReload():
 @app.route('/')
 def index():
     countReload()
-    return render_template('home.html', key_id=RAZORPAY_KEY_ID)
+    return render_template('home2.html')
 
 
 @app.get('/what_is')
